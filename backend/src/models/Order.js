@@ -42,6 +42,10 @@ const orderSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    clerkUserId: {
+      type: String,
+      default: null,
+    },
     shippingAddress: {
       type: String,
       required: [true, 'Shipping address is required'],

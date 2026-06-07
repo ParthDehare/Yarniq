@@ -1,6 +1,9 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-const useCartStore = create((set, get) => ({
+const useCartStore = create(
+  persist(
+    (set, get) => ({
   items: [],
   isOpen: false,
 
@@ -83,7 +86,13 @@ const useCartStore = create((set, get) => ({
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-  },
-}));
+    },
+  }),
+  {
+    name: 'yarniq-cart-storage',
+    storage: createJSONStorage(() => localStorage),
+    partialize: (state) => ({ items: state.items }), // Only persist cart items, not drawer state
+  }
+));
 
 export default useCartStore;

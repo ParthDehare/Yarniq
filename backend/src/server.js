@@ -26,7 +26,12 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ 
+  limit: '10mb',
+  verify: (req, res, buf) => {
+    req.rawBody = buf.toString();
+  }
+}));
 app.use(express.urlencoded({ extended: true }));
 
 // ─── Keep-Alive Route (for Render cron-job) ─────────────────

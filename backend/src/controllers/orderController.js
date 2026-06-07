@@ -80,8 +80,32 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Get user's own orders
+ * @route   GET /api/orders/my-orders/:clerkUserId
+ */
+const getMyOrders = async (req, res, next) => {
+  try {
+    const { clerkUserId } = req.params;
+    if (!clerkUserId) {
+      return res.status(400).json({ success: false, error: 'User ID is required' });
+    }
+
+    const orders = await Order.find({ clerkUserId }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: orders.length,
+      data: orders,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getOrders,
   getOrderById,
   updateOrderStatus,
+  getMyOrders,
 };
